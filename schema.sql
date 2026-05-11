@@ -1,0 +1,37 @@
+-- Database schema for Football Management System
+CREATE DATABASE IF NOT EXISTS football_db;
+USE football_db;
+
+-- 1. Clubs Table
+CREATE TABLE IF NOT EXISTS clubs (
+    ClubId INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    City VARCHAR(255) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2. Players Table
+CREATE TABLE IF NOT EXISTS players (
+    PlayerId INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    BirthDate DATE NOT NULL,
+    Position VARCHAR(100) NOT NULL,
+    ShirtNumber INT NOT NULL DEFAULT 1,
+    ClubId INT NOT NULL,
+    FOREIGN KEY (ClubId) REFERENCES clubs(ClubId) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 3. Transfers Table (Stage 4)
+CREATE TABLE IF NOT EXISTS transfers (
+    TransferId INT AUTO_INCREMENT PRIMARY KEY,
+    PlayerId INT NOT NULL,
+    FromClubId INT NULL,
+    ToClubId INT NOT NULL,
+    TransferDate DATETIME NOT NULL,
+    Fee DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
+    Note TEXT NULL,
+    FOREIGN KEY (PlayerId) REFERENCES players(PlayerId) ON DELETE CASCADE,
+    FOREIGN KEY (FromClubId) REFERENCES clubs(ClubId) ON DELETE SET NULL,
+    FOREIGN KEY (ToClubId) REFERENCES clubs(ClubId) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
